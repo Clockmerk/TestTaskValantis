@@ -1,15 +1,16 @@
 import { FormEvent } from "react";
 import { useAppDispatch } from "../../redux/store";
-import { setPage } from "../../redux/slices/pageSlice";
 import { useFetchDataQuery } from "../../redux/slices/apiSlice";
+import { paginateT } from "../../lib/types";
+import { setPaginate } from "../../redux/slices/paginateSlice";
 
 export const Pagination = ({
-  page,
+  paginate,
   isLoading,
   isError,
   limit,
 }: {
-  page: number;
+  paginate: paginateT;
   isLoading: boolean;
   isError: boolean;
   limit: number;
@@ -24,39 +25,49 @@ export const Pagination = ({
   const changePage = (e: FormEvent) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget as HTMLFormElement);
-    dispatch(setPage(Number(data.get("page"))));
+    dispatch(setPaginate({ ...paginate, page: Number(data.get("page")) }));
   };
+
   if (totalPages) {
     return (
-      <div className="flex justify-center">
-        <button
-          disabled={page === 1 || isLoading || isError}
-          onClick={() => {
-            dispatch(setPage(page - 1));
-          }}
-        >
-          Previous
-        </button>
-        <form onSubmit={changePage}>
-          <input
-            name="page"
-            type="number"
-            min={1}
-            max={totalPages && Math.floor(totalPages?.result.length / limit)}
-            placeholder={page.toString()}
-            disabled={isLoading || isError}
-          />
-        </form>
+      <>
+        {!isLoading && (
+          <span>
+            Total pages: {Math.ceil(totalPages?.result.length / paginate.limit)}
+          </span>
+        )}
+        <div className="flex justify-center *:m-2">
+          <button
+            className="navButton"
+            disabled={paginate.page === 1 || isLoading || isError}
+            onClick={() => {
+              dispatch(setPaginate({ ...paginate, page: paginate.page - 1 }));
+            }}
+          >
+            Prev
+          </button>
+          <form onSubmit={changePage}>
+            <input
+              name="page"
+              type="number"
+              min={1}
+              max={totalPages && Math.ceil(totalPages?.result.length / limit)}
+              placeholder={paginate.page.toString()}
+              disabled={isLoading || isError}
+            />
+          </form>
 
-        <button
-          disabled={ isLoading || isError}
-          onClick={() => {
-            dispatch(setPage(page + 1));
-          }}
-        >
-          Next
-        </button>
-      </div>
+          <button
+            className="navButton"
+            disabled={isLoading || isError}
+            onClick={() => {
+              dispatch(setPaginate({ ...paginate, page: paginate.page + 1 }));
+            }}
+          >
+            Next
+          </button>
+        </div>
+      </>
     );
   }
 };

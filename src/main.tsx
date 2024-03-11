@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import { Catalog } from "./pages/Catalog/catalog";
 import App from "./App";
+import { Product } from "./pages/Product/product";
 
 const router = createBrowserRouter([
   {
@@ -17,8 +18,16 @@ const router = createBrowserRouter([
         element: <Catalog />,
       },
       {
+        path: "/product/:id",
+        element: <Product />,
+      },
+      {
         path: "*",
-        element: <div>Такой страницы нет</div>,
+        element: (
+          <div className="flex justify-center mt-[50vh]">
+            Такой страницы нет ¯\_(ツ)_/¯
+          </div>
+        ),
       },
     ],
   },
@@ -27,7 +36,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />{" "}
+      <RouterProvider router={router} />
     </Provider>
   </React.StrictMode>
 );

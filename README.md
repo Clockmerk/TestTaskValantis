@@ -25,4 +25,6 @@ npm run dev
 - [Denis Syusin](https://github.com/Clockmerk)
 
 ## Future plans
-* -
+* Добавить сброс значения пагинации при новом запросе другого типа
+* Оптимизация
+* Добавление верстки

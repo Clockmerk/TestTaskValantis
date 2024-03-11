@@ -9,16 +9,15 @@ export const apiSlice = createApi({
   endpoints: (builder) => ({
     fetchData: builder.query({
       query: (payload) => ({
-          url:"/",
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Auth": xAuth,
-            
-          },
-          body: JSON.stringify(payload),
-      })
-    })
+        url: "/",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Auth": xAuth,
+        },
+        body: JSON.stringify(payload),
+      }),
+    }),
   }),
 });
 

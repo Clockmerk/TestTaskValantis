@@ -2,3 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  @apply bg-[#f8f8f8] min-h-screen;
+}
+
+.error {
+  @apply text-red-600 font-bold;
+}
+
+.active {
+  @apply underline decoration-red-700;
+}
+
+.navButton {
+  @apply bg-white  py-1 px-3 border border-gray-500 rounded;
+}
+
+.buttonError {
+  @apply bg-white text-red-600 py-1 px-3 border border-gray-500 rounded;
+}
+
+input[type="number"] {
+  text-align: center;
+}
+
+input[type="text"] {
+  text-align: center;
+}

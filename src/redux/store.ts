@@ -2,15 +2,17 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import { TypedUseSelectorHook, useSelector } from "react-redux";
 import { LC_redux, getInitialState } from "./initialState";
-import { pageReducer } from "./slices/pageSlice";
-import { limitReducer } from "./slices/limitSlice";
+import { paginateReducer } from "./slices/paginateSlice";
+import { paginateFReducer } from "./slices/paginateFSlice";
 import { queryReducer } from "./slices/querySlice";
 import { apiReducer, apiSlice } from "./slices/apiSlice";
+import { filterReducer } from "./slices/filterSlice";
 
 const rootReducer = combineReducers({
-  page: pageReducer,
-  limit: limitReducer,
+  paginate: paginateReducer,
+  paginateF: paginateFReducer,
   query: queryReducer,
+  filter: filterReducer,
   api: apiReducer,
 });
 

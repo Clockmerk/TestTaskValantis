@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDebounce } from "../../hooks/useDebounce";
-import { useAppDispatch } from "../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { setQuery } from "../../redux/slices/querySlice";
+import { setFilter } from "../../redux/slices/filterSlice";
 
 export const Search = ({
   isLoading,
@@ -10,24 +11,63 @@ export const Search = ({
   isLoading: boolean;
   isError: boolean;
 }) => {
-  const [search, setSearch] = useState<string>("");
+  const filter = useAppSelector((state) => state.filter);
+
   const dispatch = useAppDispatch();
-  const debouncedSearch = useDebounce(search, 500);
+
+  const debouncedSearch = useDebounce(filter.value, 1500);
 
   useEffect(() => {
-    if (debouncedSearch) {
+    if (
+      typeof debouncedSearch === "number" &&
+      filter.type === "price" &&
+      debouncedSearch
+    ) {
+      dispatch(
+        setQuery({
+          action: "filter",
+          params: { price: debouncedSearch },
+        })
+      );
+    }
+
+    if (
+      typeof debouncedSearch === "string" &&
+      filter.type === "name" &&
+      debouncedSearch
+    ) {
       dispatch(
         setQuery({ action: "filter", params: { product: debouncedSearch } })
       );
     }
-  }, [debouncedSearch, dispatch]);
+  }, [debouncedSearch, dispatch, filter]);
 
   return (
-    <input
-      onChange={(e) => setSearch(e.target.value)}
-      type="text"
-      placeholder="Search"
-      disabled={isLoading || isError}
-    />
+    <>
+      {filter.type === "price" && (
+        <input
+          className="max-[376px]:w-[120px]"
+          onChange={(e) =>
+            dispatch(setFilter({ ...filter, value: parseInt(e.target.value) }))
+          }
+          type="number"
+          value={filter.value}
+          min={0}
+          placeholder="Search price"
+          disabled={isLoading || isError}
+        />
+      )}
+      {filter.type === "name" && (
+        <input
+          className="max-[376px]:w-[120px]"
+          onChange={(e) =>
+            dispatch(setFilter({ ...filter, value: e.target.value }))
+          }
+          type="text"
+          placeholder="Search name"
+          disabled={isLoading || isError}
+        />
+      )}
+    </>
   );
 };
